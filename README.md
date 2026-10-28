@@ -39,3 +39,14 @@ void main() {
   print('Encoded ${output.length} bytes');
 }
 ```
+
+## License
+
+shine_dart is a translation of the [Shine](https://github.com/toots/shine)
+C library, so it is a work based on Shine and has Shine's license: the GNU
+Library General Public License, version 2 (see `LICENSE`, the `COPYING` file
+of Shine). Shine does not state a version number, so under section 13 you may
+use any version of the LGPL that the Free Software Foundation published.
+
+Copyright of the original code stays with the Shine authors. The changes
+of the translation are by Telosnex, under the same license.
