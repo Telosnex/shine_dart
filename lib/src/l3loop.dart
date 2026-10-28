@@ -73,8 +73,7 @@ int shineOuterLoop(
 ) {
   final GrInfo codInfo = config.side_info.gr[gr][ch];
 
-  codInfo.quantizerStepSize =
-      _binSearchStepSize(maxBits, ix, codInfo, config);
+  codInfo.quantizerStepSize = _binSearchStepSize(maxBits, ix, codInfo, config);
 
   codInfo.part2_length = _part2Length(gr, ch, config);
   final int huffBits = maxBits - codInfo.part2_length;
@@ -115,8 +114,7 @@ void shineIterationLoop(ShineGlobalConfig config) {
         _calcScfsi(l3Xmin, ch, gr, config);
       }
 
-      final int maxBits =
-          shineMaxReservoirBits(config.pe[ch][gr], config);
+      final int maxBits = shineMaxReservoirBits(config.pe[ch][gr], config);
 
       for (int sfb = 0; sfb < _sfbLmax; sfb++) {
         config.scalefactor.l[gr][ch][sfb] = 0;
@@ -239,8 +237,7 @@ void _calcScfsi(
     }
 
     if (l3Xmin.l[gr][ch][sfb] != 0) {
-      xm[gr][sfb] =
-          (math.log(l3Xmin.l[gr][ch][sfb]) / ln2).toInt();
+      xm[gr][sfb] = (math.log(l3Xmin.l[gr][ch][sfb]) / ln2).toInt();
     } else {
       xm[gr][sfb] = 0;
     }
@@ -355,12 +352,10 @@ int _bigvBitcount(List<int> ix, GrInfo gi) {
     bits += _countBit(ix, 0, gi.address1, gi.table_select[0]);
   }
   if (gi.table_select[1] != 0) {
-    bits +=
-        _countBit(ix, gi.address1, gi.address2, gi.table_select[1]);
+    bits += _countBit(ix, gi.address1, gi.address2, gi.table_select[1]);
   }
   if (gi.table_select[2] != 0) {
-    bits +=
-        _countBit(ix, gi.address2, gi.address3, gi.table_select[2]);
+    bits += _countBit(ix, gi.address2, gi.address3, gi.table_select[2]);
   }
 
   return bits;
@@ -423,7 +418,8 @@ int _newChooseTable(List<int> ix, int begin, int end) {
   int choice = 0;
 
   if (max < 15) {
-    for (int i = 14; i >= 0; i--) {
+    // As C's `for (i = 14; i--;)`: from table 13 down.
+    for (int i = 13; i >= 0; i--) {
       if (shineHuffmanTable[i].xlen > max) {
         choice = i;
         break;
@@ -474,27 +470,28 @@ int _newChooseTable(List<int> ix, int begin, int end) {
         break;
     }
   } else {
-    int bestTable = 15;
-    int bestCount = 1000000;
+    // As C: the first table of each linbits group (15-23, 24-31) that
+    // reaches max, and the cheaper of the two. Trying every table picked
+    // other tables than C's encoder.
+    final int linMax = max - 15;
+    int choice1 = 0;
     for (int i = 15; i < 24; i++) {
-      if (shineHuffmanTable[i].linmax >= max - 15) {
-        final int count = _countBit(ix, begin, end, i);
-        if (count < bestCount) {
-          bestCount = count;
-          bestTable = i;
-        }
+      if (shineHuffmanTable[i].linmax >= linMax) {
+        choice = i;
+        break;
       }
     }
     for (int i = 24; i < 32; i++) {
-      if (shineHuffmanTable[i].linmax >= max - 15) {
-        final int count = _countBit(ix, begin, end, i);
-        if (count < bestCount) {
-          bestCount = count;
-          bestTable = i;
-        }
+      if (shineHuffmanTable[i].linmax >= linMax) {
+        choice1 = i;
+        break;
       }
     }
-    choice = bestTable;
+    final int sum0 = _countBit(ix, begin, end, choice);
+    final int sum1 = _countBit(ix, begin, end, choice1);
+    if (sum1 < sum0) {
+      choice = choice1;
+    }
   }
 
   return choice;
@@ -522,9 +519,10 @@ void _subdivide(GrInfo codInfo, ShineGlobalConfig config) {
   if (codInfo.big_values == 0) {
     codInfo.region0_count = 0;
     codInfo.region1_count = 0;
-    codInfo.address1 = 0;
-    codInfo.address2 = 0;
-    codInfo.address3 = 0;
+    // As C: address1-3 keep their values from the previous quantization, and
+    // bigv_tab_select and bigv_bitcount still count those regions. That
+    // overcounts at very low bitrates (8-16 kbit/s), but the output is then
+    // C's, byte for byte.
     return;
   }
 
@@ -634,10 +632,7 @@ void _calcRunlen(List<int> ix, GrInfo codInfo) {
 
   codInfo.count1 = 0;
   while (i > 3) {
-    if (ix[i - 1] <= 1 &&
-        ix[i - 2] <= 1 &&
-        ix[i - 3] <= 1 &&
-        ix[i - 4] <= 1) {
+    if (ix[i - 1] <= 1 && ix[i - 2] <= 1 && ix[i - 3] <= 1 && ix[i - 4] <= 1) {
       codInfo.count1++;
       i -= 4;
     } else {
