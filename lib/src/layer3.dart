@@ -208,11 +208,9 @@ ShineT? shineInitialise(ShineConfig pubConfig) {
   config.side_info.reset();
 
   if (mpeg.granules_per_frame == 2) {
-    config.sideinfo_len =
-        8 * ((wave.channels == 1) ? 4 + 17 : 4 + 32);
+    config.sideinfo_len = 8 * ((wave.channels == 1) ? 4 + 17 : 4 + 32);
   } else {
-    config.sideinfo_len =
-        8 * ((wave.channels == 1) ? 4 + 9 : 4 + 17);
+    config.sideinfo_len = 8 * ((wave.channels == 1) ? 4 + 9 : 4 + 17);
   }
 
   return config;
@@ -230,13 +228,11 @@ ShineEncodeResult _encodeInternal(ShineT config, int stride) {
   final PrivShineMpeg mpeg = config.mpeg;
 
   if (mpeg.frac_slots_per_frame != 0) {
-    mpeg.padding =
-        (mpeg.slot_lag <= (mpeg.frac_slots_per_frame - 1.0)) ? 1 : 0;
+    mpeg.padding = (mpeg.slot_lag <= (mpeg.frac_slots_per_frame - 1.0)) ? 1 : 0;
     mpeg.slot_lag += mpeg.padding - mpeg.frac_slots_per_frame;
   }
 
-  mpeg.bits_per_frame =
-      8 * (mpeg.whole_slots_per_frame + mpeg.padding);
+  mpeg.bits_per_frame = 8 * (mpeg.whole_slots_per_frame + mpeg.padding);
   config.mean_bits =
       (mpeg.bits_per_frame - config.sideinfo_len) ~/ mpeg.granules_per_frame;
 
@@ -246,7 +242,11 @@ ShineEncodeResult _encodeInternal(ShineT config, int stride) {
 
   final int written = config.bs.dataPosition;
   final Uint8List view = Uint8List.sublistView(config.bs.data, 0, written);
-  config.bs.reset();
+  // Only the written bytes restart, as in C: the bits still in the cache
+  // (a frame need not end on a 32-bit boundary) start the next frame's data.
+  // A full reset dropped them, and a frame with a padding byte came out a
+  // byte short (every 44.1 kHz stream was corrupt after its first frame).
+  config.bs.dataPosition = 0;
   return ShineEncodeResult(view, written);
 }
 
@@ -271,9 +271,9 @@ ShineEncodeResult shineEncodeBuffer(ShineT config, List<Int16List> data) {
   return _encodeInternal(config, 1);
 }
 
-ShineEncodeResult shineEncodeBufferInterleaved(
-    ShineT config, Int16List data) {
-  final int expectedSamples = shineSamplesPerPass(config) * config.wave.channels;
+ShineEncodeResult shineEncodeBufferInterleaved(ShineT config, Int16List data) {
+  final int expectedSamples =
+      shineSamplesPerPass(config) * config.wave.channels;
   if (data.length < expectedSamples) {
     throw ArgumentError('Interleaved buffer has ${data.length} samples, '
         'expected at least $expectedSamples');
@@ -292,7 +292,7 @@ ShineEncodeResult shineEncodeBufferInterleaved(
 ShineEncodeResult shineFlush(ShineT config) {
   final int written = config.bs.dataPosition;
   final Uint8List view = Uint8List.sublistView(config.bs.data, 0, written);
-  config.bs.reset();
+  config.bs.dataPosition = 0;
   return ShineEncodeResult(view, written);
 }
 
