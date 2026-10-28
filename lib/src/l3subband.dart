@@ -52,14 +52,36 @@ void shineWindowFilterSubband(
 
   final Int32List y = Int32List(64);
   for (int i = 63; i >= 0; i--) {
-    int acc = mul32(delayLine[(offset + i + (0 << 6)) & mask], shineEnwindow[i + (0 << 6)]);
-    acc = add32(acc, mul32(delayLine[(offset + i + (1 << 6)) & mask], shineEnwindow[i + (1 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (2 << 6)) & mask], shineEnwindow[i + (2 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (3 << 6)) & mask], shineEnwindow[i + (3 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (4 << 6)) & mask], shineEnwindow[i + (4 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (5 << 6)) & mask], shineEnwindow[i + (5 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (6 << 6)) & mask], shineEnwindow[i + (6 << 6)]));
-    acc = add32(acc, mul32(delayLine[(offset + i + (7 << 6)) & mask], shineEnwindow[i + (7 << 6)]));
+    int acc = mul32(
+        delayLine[(offset + i + (0 << 6)) & mask], shineEnwindow[i + (0 << 6)]);
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (1 << 6)) & mask],
+            shineEnwindow[i + (1 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (2 << 6)) & mask],
+            shineEnwindow[i + (2 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (3 << 6)) & mask],
+            shineEnwindow[i + (3 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (4 << 6)) & mask],
+            shineEnwindow[i + (4 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (5 << 6)) & mask],
+            shineEnwindow[i + (5 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (6 << 6)) & mask],
+            shineEnwindow[i + (6 << 6)]));
+    acc = add32(
+        acc,
+        mul32(delayLine[(offset + i + (7 << 6)) & mask],
+            shineEnwindow[i + (7 << 6)]));
     y[i] = acc;
   }
 

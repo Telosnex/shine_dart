@@ -166,16 +166,20 @@ class ShineSideInfo {
 
 class ShinePsyRatio {
   ShinePsyRatio()
-      : l = List.generate(maxGranules,
-            (_) => List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
+      : l = List.generate(
+            maxGranules,
+            (_) =>
+                List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
 
   final List<List<List<double>>> l;
 }
 
 class ShinePsyXmin {
   ShinePsyXmin()
-      : l = List.generate(maxGranules,
-            (_) => List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
+      : l = List.generate(
+            maxGranules,
+            (_) =>
+                List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
 
   final List<List<List<double>>> l;
 }
@@ -186,8 +190,8 @@ class ShineScalefac {
             (_) => List.generate(maxChannels, (_) => Int32List(22))),
         s = List.generate(
             maxGranules,
-            (_) => List.generate(maxChannels,
-                (_) => List.generate(13, (_) => Int32List(3))));
+            (_) => List.generate(
+                maxChannels, (_) => List.generate(13, (_) => Int32List(3))));
 
   final List<List<Int32List>> l;
   final List<List<List<Int32List>>> s;
@@ -201,7 +205,8 @@ class PcmPointer {
 
   int get length => data.length;
 
-  PcmPointer copyWith({int? position}) => PcmPointer(data, position ?? this.position);
+  PcmPointer copyWith({int? position}) =>
+      PcmPointer(data, position ?? this.position);
 }
 
 class ShineGlobalConfig {
@@ -209,7 +214,7 @@ class ShineGlobalConfig {
     required this.wave,
     required this.mpeg,
     BitStream? bitStream,
-  })  : bs = bitStream ?? BitStream();
+  }) : bs = bitStream ?? BitStream();
 
   final PrivShineWave wave;
   final PrivShineMpeg mpeg;
@@ -223,14 +228,18 @@ class ShineGlobalConfig {
   final List<List<double>> pe = List<List<double>>.generate(
       maxChannels, (_) => List<double>.filled(maxGranules, 0.0));
   final List<List<Int32List>> l3_enc = List<List<Int32List>>.generate(
-      maxChannels, (_) => List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
+      maxChannels,
+      (_) =>
+          List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
   final List<List<Int32List>> mdct_freq = List<List<Int32List>>.generate(
-      maxChannels, (_) => List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
+      maxChannels,
+      (_) =>
+          List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
   final List<List<List<Int32List>>> l3_sb_sample =
       List<List<List<Int32List>>>.generate(
           maxChannels,
-          (_) => List<List<Int32List>>.generate(
-              maxGranules + 1, (_) => List<Int32List>.generate(18, (_) => Int32List(sbLimit))));
+          (_) => List<List<Int32List>>.generate(maxGranules + 1,
+              (_) => List<Int32List>.generate(18, (_) => Int32List(sbLimit))));
   int ResvSize = 0;
   int ResvMax = 0;
   final L3Loop l3loop = L3Loop();

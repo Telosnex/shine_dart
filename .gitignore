@@ -62,3 +62,6 @@ metrics/*
 
 # Code coverage files (i.e. lcov.info)
 coverage/**
+
+# Written by the encoder tests.
+test/output/

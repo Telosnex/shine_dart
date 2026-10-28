@@ -47,8 +47,7 @@ void shineMdctSub(ShineGlobalConfig config, int stride) {
 
       final Int32List mdctOut = config.mdct_freq[ch][gr];
       final List<Int32List> prevSamples = config.l3_sb_sample[ch][gr];
-      final List<Int32List> currSamples =
-          config.l3_sb_sample[ch][gr + 1];
+      final List<Int32List> currSamples = config.l3_sb_sample[ch][gr + 1];
       final List<int> mdctIn = List<int>.filled(36, 0, growable: false);
 
       for (int band = 0; band < sbLimit; band++) {
@@ -114,13 +113,11 @@ List<int> _buildMdctCoefficients({required bool cs}) {
     -0.0142,
     -0.0037,
   ];
-  return coefficients
-      .map((double coef) {
-        final double value = cs
-            ? (1.0 / math.sqrt(1.0 + coef * coef))
-            : (coef / math.sqrt(1.0 + coef * coef));
-        final double scaled = value * 0x7fffffff;
-        return scaled >= 0 ? scaled.floor() : scaled.ceil();
-      })
-      .toList(growable: false);
+  return coefficients.map((double coef) {
+    final double value = cs
+        ? (1.0 / math.sqrt(1.0 + coef * coef))
+        : (coef / math.sqrt(1.0 + coef * coef));
+    final double scaled = value * 0x7fffffff;
+    return scaled >= 0 ? scaled.floor() : scaled.ceil();
+  }).toList(growable: false);
 }

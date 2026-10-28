@@ -1,3 +1,7 @@
+// Reads WAV fixtures with dart:io: the VM only.
+@TestOn('vm')
+library;
+
 import 'dart:io';
 import 'dart:typed_data';
 

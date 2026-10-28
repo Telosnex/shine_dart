@@ -17,8 +17,7 @@ void main(List<String> args) {
       ..bitr = 64
       ..mode = StereoMode.mono,
   );
-  final encoder = shineInitialise(config)!
-    ..side_info.reset();
+  final encoder = shineInitialise(config)!..side_info.reset();
 
   final samplesPerPass = shineSamplesPerPass(encoder);
   final frameSize = samplesPerPass * wav.numChannels;
@@ -46,9 +45,11 @@ void main(List<String> args) {
       stdout.writeln('  mean_bits=${encoder.mean_bits}, '
           'sideinfo_len=${encoder.sideinfo_len}');
       stdout.writeln('  encoded bytes=${result.length}');
-      stdout.writeln('  ResvSize=${encoder.ResvSize}, ResvMax=${encoder.ResvMax}, '
+      stdout.writeln(
+          '  ResvSize=${encoder.ResvSize}, ResvMax=${encoder.ResvMax}, '
           'resvDrain=${encoder.side_info.resvDrain}');
-      stdout.writeln('  mdct_freq[0..31]=${encoder.mdct_freq[0][0].sublist(0, 32)}');
+      stdout.writeln(
+          '  mdct_freq[0..31]=${encoder.mdct_freq[0][0].sublist(0, 32)}');
       stdout.writeln(
           '  subband[gr+1][k=0][0..31]=${encoder.l3_sb_sample[0][1][0].sublist(0, 32)}');
       stdout.writeln('  shineEnwindow[0..9]=${shineEnwindow.sublist(0, 10)}');
