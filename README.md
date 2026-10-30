@@ -11,7 +11,7 @@ Feature complete. Encoding functionality is implemented and tested.
 ```dart
 import 'dart:typed_data';
 
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 
 void main() {
   final config = ShineConfig(

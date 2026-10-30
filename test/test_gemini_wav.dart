@@ -5,7 +5,7 @@ library;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:test/test.dart';
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 
 void main() {
   test('Encode Gemini WAV file', () {

@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 
 void main(List<String> args) {
   final file = File('test/assets/audio_sample_mono_24khz_16bit_golden.wav');

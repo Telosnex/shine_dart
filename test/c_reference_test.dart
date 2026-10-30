@@ -1,5 +1,5 @@
 import 'package:crypto/crypto.dart';
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 import 'package:test/test.dart';
 
 import 'c_reference_digests.dart';

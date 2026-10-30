@@ -8,7 +8,7 @@
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 
 import '../test/support/signal.dart';
 import '../test/support/configs.dart';

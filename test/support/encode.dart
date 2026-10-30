@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:shine_dart/shine.dart';
+import 'package:shine_dart/shine_dart.dart';
 
 /// Encodes interleaved [pcm] as the C `shineenc` does: stereo mode for two
 /// channels, mono for one, the last pass padded with zeros.
