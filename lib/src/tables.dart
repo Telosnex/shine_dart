@@ -96,7 +96,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     288,
     342,
     418,
-    576
+    576,
   ],
   <int>[
     0,
@@ -121,7 +121,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     276,
     330,
     384,
-    576
+    576,
   ],
   <int>[
     0,
@@ -146,7 +146,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     364,
     448,
     550,
-    576
+    576,
   ],
   <int>[
     0,
@@ -171,7 +171,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     396,
     464,
     522,
-    576
+    576,
   ],
   <int>[
     0,
@@ -196,7 +196,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     394,
     464,
     540,
-    576
+    576,
   ],
   <int>[
     0,
@@ -221,7 +221,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     396,
     464,
     522,
-    576
+    576,
   ],
   <int>[
     0,
@@ -246,7 +246,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     396,
     464,
     522,
-    576
+    576,
   ],
   <int>[
     0,
@@ -271,7 +271,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     396,
     464,
     522,
-    576
+    576,
   ],
   <int>[
     0,
@@ -296,7 +296,7 @@ const List<List<int>> shineScaleFactorBandIndex = <List<int>>[
     570,
     572,
     574,
-    576
+    576,
   ],
 ];
 

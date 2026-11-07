@@ -14,9 +14,13 @@ enum Channels {
   pcmStereo(2);
 
   const Channels(this.channelCount);
+
+  /// The number of channels: 1 or 2.
   final int channelCount;
 }
 
+/// The MPEG audio version, from the sample rate: MPEG-1 for 32 to 48 kHz,
+/// MPEG-2 for 16 to 24 kHz and MPEG-2.5 for 8 to 12 kHz.
 enum MpegVersion {
   mpeg25(0, granulesPerFrame: 1),
   reserved(1, granulesPerFrame: -1),
@@ -25,17 +29,24 @@ enum MpegVersion {
 
   const MpegVersion(this.value, {required this.granulesPerFrame});
 
+  /// The version bits of the frame header.
   final int value;
+
+  /// The granules of 576 samples in one frame.
   final int granulesPerFrame;
 }
 
+/// The MPEG audio layer. Shine encodes only layer III (MP3).
 enum MpegLayer {
   layer3(1);
 
   const MpegLayer(this.value);
+
+  /// The layer bits of the frame header.
   final int value;
 }
 
+/// The channel mode of the frame header.
 enum StereoMode {
   stereo(0),
   jointStereo(1),
@@ -43,25 +54,35 @@ enum StereoMode {
   mono(3);
 
   const StereoMode(this.value);
+
+  /// The mode bits of the frame header.
   final int value;
 }
 
+/// The de-emphasis that a decoder applies, from the frame header.
 enum Emphasis {
   none(0),
   mu50_15(1),
   citt(3);
 
   const Emphasis(this.value);
+
+  /// The emphasis bits of the frame header.
   final int value;
 }
 
 /// Public descriptor for the PCM input stream.
 class ShineWave {
+  /// A stream of [channels] at [samplerate] Hz.
   ShineWave({this.channels = Channels.pcmStereo, this.samplerate = 44100});
 
+  /// Mono or stereo.
   Channels channels;
+
+  /// Samples per second, per channel. [shineCheckConfig] checks a rate.
   int samplerate;
 
+  /// The number of channels: 1 or 2.
   int get channelCount => channels.channelCount;
 }
 
@@ -75,18 +96,31 @@ class ShineMpeg {
     this.original = true,
   });
 
+  /// The channel mode.
   StereoMode mode;
+
+  /// The bitrate in kbit/s, for example 128.
   int bitr;
+
+  /// The de-emphasis bits of the header.
   Emphasis emph;
+
+  /// The copyright bit of the header.
   bool copyright;
+
+  /// The original bit of the header: `false` for a copy.
   bool original;
 }
 
 /// Aggregated configuration passed to [shineInitialise].
 class ShineConfig {
+  /// An encoder configuration for [wave] input and [mpeg] output.
   ShineConfig({required this.wave, required this.mpeg});
 
+  /// The PCM input.
   final ShineWave wave;
+
+  /// The MP3 output.
   final ShineMpeg mpeg;
 }
 
@@ -218,9 +252,14 @@ ShineT? shineInitialise(ShineConfig pubConfig) {
 
 /// Encapsulates the encoded output buffer and the number of valid bytes.
 class ShineEncodeResult {
+  /// A result of the first [length] bytes of [buffer].
   ShineEncodeResult(this.buffer, this.length);
 
+  /// The encoded MP3 bytes. A view of the encoder's buffer: the next call
+  /// to the encoder overwrites it, so copy the bytes to keep them.
   final Uint8List buffer;
+
+  /// The number of bytes in [buffer].
   final int length;
 }
 
@@ -250,6 +289,9 @@ ShineEncodeResult _encodeInternal(ShineT config, int stride) {
   return ShineEncodeResult(view, written);
 }
 
+/// Encodes one pass of PCM from one buffer per channel: each of [data] has
+/// at least [shineSamplesPerPass] samples. Throws [ArgumentError] for too
+/// few channels or samples.
 ShineEncodeResult shineEncodeBuffer(ShineT config, List<Int16List> data) {
   if (data.isEmpty || data.length < config.wave.channels) {
     throw ArgumentError('PCM buffer does not contain the expected channels');
@@ -259,8 +301,10 @@ ShineEncodeResult shineEncodeBuffer(ShineT config, List<Int16List> data) {
   for (int ch = 0; ch < config.wave.channels; ch++) {
     final Int16List channelData = data[ch];
     if (channelData.length < expectedSamples) {
-      throw ArgumentError('Channel $ch has ${channelData.length} samples, '
-          'expected at least $expectedSamples');
+      throw ArgumentError(
+        'Channel $ch has ${channelData.length} samples, '
+        'expected at least $expectedSamples',
+      );
     }
     config.buffer[ch] = PcmPointer(channelData, 0);
   }
@@ -271,12 +315,17 @@ ShineEncodeResult shineEncodeBuffer(ShineT config, List<Int16List> data) {
   return _encodeInternal(config, 1);
 }
 
+/// Encodes one pass of interleaved PCM: [data] has at least
+/// [shineSamplesPerPass] samples per channel. Throws [ArgumentError] for
+/// too few samples.
 ShineEncodeResult shineEncodeBufferInterleaved(ShineT config, Int16List data) {
   final int expectedSamples =
       shineSamplesPerPass(config) * config.wave.channels;
   if (data.length < expectedSamples) {
-    throw ArgumentError('Interleaved buffer has ${data.length} samples, '
-        'expected at least $expectedSamples');
+    throw ArgumentError(
+      'Interleaved buffer has ${data.length} samples, '
+      'expected at least $expectedSamples',
+    );
   }
 
   config.buffer[0] = PcmPointer(data, 0);
@@ -289,6 +338,8 @@ ShineEncodeResult shineEncodeBufferInterleaved(ShineT config, Int16List data) {
   return _encodeInternal(config, config.wave.channels);
 }
 
+/// Returns the bytes that the encoder still holds. Call it after the last
+/// pass.
 ShineEncodeResult shineFlush(ShineT config) {
   final int written = config.bs.dataPosition;
   final Uint8List view = Uint8List.sublistView(config.bs.data, 0, written);
@@ -296,6 +347,8 @@ ShineEncodeResult shineFlush(ShineT config) {
   return ShineEncodeResult(view, written);
 }
 
+/// Resets the bitstream of [config] and drops its PCM references. Do not
+/// use [config] after.
 void shineClose(ShineT config) {
   config.bs.reset();
   for (int i = 0; i < config.buffer.length; i++) {

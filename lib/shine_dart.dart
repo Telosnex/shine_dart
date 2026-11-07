@@ -1,8 +1,9 @@
-/// Public API surface for the work-in-progress Shine MP3 encoder port.
+/// A pure Dart port of the Shine MP3 encoder.
 ///
-/// The classes exported here mirror the key data structures from the original
-/// C implementation located under `shine/src/lib`. Only a subset of the
-/// encoder pipeline has been implemented in pure Dart so far.
+/// [shineInitialise] makes an encoder from a [ShineConfig].
+/// [shineEncodeBuffer] or [shineEncodeBufferInterleaved] encodes one pass of
+/// [shineSamplesPerPass] samples per channel, and [shineFlush] returns the
+/// last bytes. The other classes mirror the data structures of the C code.
 library shine_dart;
 
 export 'src/constants.dart';

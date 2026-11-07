@@ -67,10 +67,14 @@ class L3Loop {
   final Int32List xrabs = Int32List(granuleSize);
   int xrmax = 0;
   final List<int> en_tot = List<int>.filled(maxGranules, 0);
-  final List<Int32List> en =
-      List<Int32List>.generate(maxGranules, (_) => Int32List(21));
-  final List<Int32List> xm =
-      List<Int32List>.generate(maxGranules, (_) => Int32List(21));
+  final List<Int32List> en = List<Int32List>.generate(
+    maxGranules,
+    (_) => Int32List(21),
+  );
+  final List<Int32List> xm = List<Int32List>.generate(
+    maxGranules,
+    (_) => Int32List(21),
+  );
   final List<int> xrmaxl = List<int>.filled(maxGranules, 0);
   final List<double> steptab = List<double>.filled(128, 0.0);
   final List<int> steptabi = List<int>.filled(128, 0);
@@ -143,10 +147,14 @@ class GrInfo {
 class ShineSideInfo {
   int private_bits = 0;
   int resvDrain = 0;
-  final List<List<int>> scfsi =
-      List<List<int>>.generate(maxChannels, (_) => List<int>.filled(4, 0));
+  final List<List<int>> scfsi = List<List<int>>.generate(
+    maxChannels,
+    (_) => List<int>.filled(4, 0),
+  );
   final List<List<GrInfo>> gr = List<List<GrInfo>>.generate(
-      maxGranules, (_) => List<GrInfo>.generate(maxChannels, (_) => GrInfo()));
+    maxGranules,
+    (_) => List<GrInfo>.generate(maxChannels, (_) => GrInfo()),
+  );
 
   void reset() {
     private_bits = 0;
@@ -167,9 +175,9 @@ class ShineSideInfo {
 class ShinePsyRatio {
   ShinePsyRatio()
       : l = List.generate(
-            maxGranules,
-            (_) =>
-                List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
+          maxGranules,
+          (_) => List.generate(maxChannels, (_) => List<double>.filled(21, 0)),
+        );
 
   final List<List<List<double>>> l;
 }
@@ -177,21 +185,26 @@ class ShinePsyRatio {
 class ShinePsyXmin {
   ShinePsyXmin()
       : l = List.generate(
-            maxGranules,
-            (_) =>
-                List.generate(maxChannels, (_) => List<double>.filled(21, 0)));
+          maxGranules,
+          (_) => List.generate(maxChannels, (_) => List<double>.filled(21, 0)),
+        );
 
   final List<List<List<double>>> l;
 }
 
 class ShineScalefac {
   ShineScalefac()
-      : l = List.generate(maxGranules,
-            (_) => List.generate(maxChannels, (_) => Int32List(22))),
+      : l = List.generate(
+          maxGranules,
+          (_) => List.generate(maxChannels, (_) => Int32List(22)),
+        ),
         s = List.generate(
-            maxGranules,
-            (_) => List.generate(
-                maxChannels, (_) => List.generate(13, (_) => Int32List(3))));
+          maxGranules,
+          (_) => List.generate(
+            maxChannels,
+            (_) => List.generate(13, (_) => Int32List(3)),
+          ),
+        );
 
   final List<List<Int32List>> l;
   final List<List<List<Int32List>>> s;
@@ -226,20 +239,25 @@ class ShineGlobalConfig {
   final ShineScalefac scalefactor = ShineScalefac();
   final List<PcmPointer?> buffer = List<PcmPointer?>.filled(maxChannels, null);
   final List<List<double>> pe = List<List<double>>.generate(
-      maxChannels, (_) => List<double>.filled(maxGranules, 0.0));
+    maxChannels,
+    (_) => List<double>.filled(maxGranules, 0.0),
+  );
   final List<List<Int32List>> l3_enc = List<List<Int32List>>.generate(
-      maxChannels,
-      (_) =>
-          List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
+    maxChannels,
+    (_) => List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)),
+  );
   final List<List<Int32List>> mdct_freq = List<List<Int32List>>.generate(
-      maxChannels,
-      (_) =>
-          List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)));
+    maxChannels,
+    (_) => List<Int32List>.generate(maxGranules, (_) => Int32List(granuleSize)),
+  );
   final List<List<List<Int32List>>> l3_sb_sample =
       List<List<List<Int32List>>>.generate(
-          maxChannels,
-          (_) => List<List<Int32List>>.generate(maxGranules + 1,
-              (_) => List<Int32List>.generate(18, (_) => Int32List(sbLimit))));
+    maxChannels,
+    (_) => List<List<Int32List>>.generate(
+      maxGranules + 1,
+      (_) => List<Int32List>.generate(18, (_) => Int32List(sbLimit)),
+    ),
+  );
   int ResvSize = 0;
   int ResvMax = 0;
   final L3Loop l3loop = L3Loop();

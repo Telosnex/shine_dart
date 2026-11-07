@@ -144,8 +144,14 @@ void shineIterationLoop(ShineGlobalConfig config) {
       codInfo.count1table_select = 0;
 
       if (config.l3loop.xrmax != 0) {
-        codInfo.part2_3_length =
-            shineOuterLoop(maxBits, l3Xmin, ix, gr, ch, config);
+        codInfo.part2_3_length = shineOuterLoop(
+          maxBits,
+          l3Xmin,
+          ix,
+          gr,
+          ch,
+          config,
+        );
       }
 
       shineResvAdjust(codInfo, config);
@@ -192,12 +198,7 @@ int quantize(List<int> ix, int stepsize, ShineGlobalConfig config) {
   return max;
 }
 
-void _calcScfsi(
-  ShinePsyXmin l3Xmin,
-  int ch,
-  int gr,
-  ShineGlobalConfig config,
-) {
+void _calcScfsi(ShinePsyXmin l3Xmin, int ch, int gr, ShineGlobalConfig config) {
   final ShineSideInfo sideInfo = config.side_info;
   final List<Int32List> xm = config.l3loop.xm;
   final List<Int32List> en = config.l3loop.en;
@@ -506,12 +507,18 @@ void _bigvTabSelect(List<int> ix, GrInfo codInfo) {
     codInfo.table_select[0] = _newChooseTable(ix, 0, codInfo.address1);
   }
   if (codInfo.address2 > codInfo.address1) {
-    codInfo.table_select[1] =
-        _newChooseTable(ix, codInfo.address1, codInfo.address2);
+    codInfo.table_select[1] = _newChooseTable(
+      ix,
+      codInfo.address1,
+      codInfo.address2,
+    );
   }
   if ((codInfo.big_values << 1) > codInfo.address2) {
-    codInfo.table_select[2] =
-        _newChooseTable(ix, codInfo.address2, codInfo.big_values << 1);
+    codInfo.table_select[2] = _newChooseTable(
+      ix,
+      codInfo.address2,
+      codInfo.big_values << 1,
+    );
   }
 }
 
