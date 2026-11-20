@@ -4,7 +4,8 @@ Pure Dart port of the Shine MP3 encoder C implementation.
 
 ## Status
 
-Feature complete. Encoding functionality is implemented and tested.
+**Discontinued.** This package is no longer maintained. Use
+[`lame`](https://pub.dev/packages/lame) instead.
 
 ## Example
 
